@@ -147,26 +147,26 @@ public class AugmentedImageNode extends AnchorNode {
 //        Vector3 localPosition = new Vector3();
 //        Node cornerNode;
 
-//        if (!hasBeenSet) {
+        if (!hasBeenSet) {
 
-//            hasBeenSet = true;
+            hasBeenSet = true;
 
-        // Set the anchor based on the center of the image.
-        setAnchor(image.createAnchor(image.getCenterPose()));
+            // Set the anchor based on the center of the image.
+            setAnchor(image.createAnchor(image.getCenterPose()));
 
-        // Make the 4 corner nodes.
-        Vector3 localPosition = new Vector3();
-        Node cornerNode;
+            // Make the 4 corner nodes.
+            Vector3 localPosition = new Vector3();
+            Node cornerNode;
 
-        ViewRenderable theView = something.getNow(null);
+            ViewRenderable theView = something.getNow(null);
 
-        localPosition.set(0.0f, 0.0f, 0.0f);
-        cornerNode = new Node();
-        cornerNode.setParent(this);
-        cornerNode.setLocalPosition(localPosition);
-        cornerNode.setLocalRotation(Quaternion.axisAngle(new Vector3(1f, 0f, 0f), 90f));
-        cornerNode.setRenderable(theView);
-//        }
+            localPosition.set(0.0f, 0.0f, 0.0f);
+            cornerNode = new Node();
+            cornerNode.setParent(this);
+            cornerNode.setLocalPosition(localPosition);
+            cornerNode.setLocalRotation(Quaternion.axisAngle(new Vector3(1f, 0f, 0f), 90f));
+            cornerNode.setRenderable(theView);
+        }
        /* // Upper left corner.
         localPosition.set(-0.5f * image.getExtentX(), 0.0f, -0.5f * image.getExtentZ());
         cornerNode = new Node();
