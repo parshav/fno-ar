@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.ar.sceneform.samples.augmentedimage;
+package com.fanx.augrel.augmentedimage;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import com.google.ar.core.AugmentedImageDatabase;
 import com.google.ar.core.Config;
 import com.google.ar.core.Session;
-import com.google.ar.sceneform.samples.common.helpers.SnackbarHelper;
+import com.fanx.augrel.helpers.SnackbarHelper;
 import com.google.ar.sceneform.ux.ArFragment;
 import java.io.IOException;
 import java.io.InputStream;

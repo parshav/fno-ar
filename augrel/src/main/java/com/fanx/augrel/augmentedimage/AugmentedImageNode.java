@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.ar.sceneform.samples.augmentedimage;
+package com.fanx.augrel.augmentedimage;
 
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
+import com.fanx.augrel.R;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Node;
@@ -81,12 +82,7 @@ public class AugmentedImageNode extends AnchorNode {
                 ViewRenderable.builder()
                     .setVerticalAlignment(ViewRenderable.VerticalAlignment.CENTER)
                     .setView(context, R.layout.custom_view)
-                    .setSizer(new ViewSizer() {
-                        @Override
-                        public Vector3 getSize(View view) {
-                            return new Vector3(0.1f, 0.1f, 0.1f);
-                        }
-                    })
+                    .setSizer(view -> new Vector3(0.1f, 0.1f, 0.1f))
                     .build();
         }
     }

@@ -17,7 +17,7 @@
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.google.ar.sceneform.samples.augmentedimage"
+        applicationId "com.fanx.augrel.augmentedimage"
 
         // Sceneform requires minSdkVersion >= 24.
         minSdkVersion 24
@@ -52,6 +52,8 @@ dependencies {
 
     // Use the Sceneform UX Package built from the source files included in the sceneformux folder.
     //api project(":sceneformux")
+
+    implementation project(":augrel")
 }
 
 apply plugin: 'com.google.ar.sceneform.plugin'
