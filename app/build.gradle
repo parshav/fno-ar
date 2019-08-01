@@ -13,6 +13,8 @@
  * limitations under the License.
  */
  apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -54,6 +56,7 @@ dependencies {
     //api project(":sceneformux")
 
     implementation project(":augrel")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.ar.sceneform.plugin'
@@ -77,3 +80,6 @@ sceneform.asset('sampledata/models/frame_upper_right.obj',
         'default',
         'sampledata/models/frame_upper_right.sfa',
         'src/main/assets/models/frame_upper_right')
+repositories {
+    mavenCentral()
+}
