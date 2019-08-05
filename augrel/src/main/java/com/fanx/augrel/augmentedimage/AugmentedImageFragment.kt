@@ -2,9 +2,6 @@ package com.fanx.augrel.augmentedimage
 
 import android.app.ActivityManager
 import android.content.Context
-import android.content.res.AssetManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -41,7 +38,9 @@ class AugmentedImageFragment : ArFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         // Turn off the plane discovery since we're only looking for images
@@ -52,7 +51,9 @@ class AugmentedImageFragment : ArFragment() {
     }
 
     override fun getSessionConfiguration(session: Session): Config {
-        val config = super.getSessionConfiguration(session)
+        val config = super.getSessionConfiguration(session).apply {
+            focusMode = Config.FocusMode.AUTO
+        }
         if (!setupAugmentedImageDatabase(config, session)) {
             SnackbarHelper.getInstance()
                     .showError(activity, "Could not setup augmented image database")
@@ -70,68 +71,29 @@ class AugmentedImageFragment : ArFragment() {
             return false
         }
 
-        // There are two ways to configure an AugmentedImageDatabase:
-        // 1. Add Bitmap to DB directly
-        // 2. Load a pre-built AugmentedImageDatabase
-        // Option 2) has
-        // * shorter setup time
-        // * doesn't require images to be packaged in apk.
-        if (USE_SINGLE_IMAGE) {
-            val augmentedImageBitmap = loadAugmentedImageBitmap(assetManager) ?: return false
-
-            augmentedImageDatabase = AugmentedImageDatabase(session)
-            augmentedImageDatabase.addImage(DEFAULT_IMAGE_NAME, augmentedImageBitmap)
-            // If the physical size of the image is known, you can instead use:
-            //     augmentedImageDatabase.addImage("image_name", augmentedImageBitmap, widthInMeters);
-            // This will improve the initial detection speed. ARCore will still actively estimate the
-            // physical size of the image as it is viewed from multiple viewpoints.
-        } else {
-            // This is an alternative way to initialize an AugmentedImageDatabase instance,
-            // load a pre-existing augmented image database.
-            try {
-                context!!.assets
-                        .open(SAMPLE_IMAGE_DATABASE)
-                        .use { stream ->
-                            augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, stream)
-                        }
-            } catch (e: IOException) {
-                Log.e(TAG, "IO exception loading augmented image database.", e)
-                return false
-            }
-
+        // This is an alternative way to initialize an AugmentedImageDatabase instance,
+        // load a pre-existing augmented image database.
+        try {
+            context!!.assets
+                    .open(SAMPLE_IMAGE_DATABASE)
+                    .use { stream ->
+                        augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, stream)
+                    }
+        } catch (e: IOException) {
+            Log.e(TAG, "IO exception loading augmented image database.", e)
+            return false
         }
 
         config.augmentedImageDatabase = augmentedImageDatabase
         return true
     }
 
-    private fun loadAugmentedImageBitmap(assetManager: AssetManager): Bitmap? {
-        try {
-            assetManager.open(DEFAULT_IMAGE_NAME).use { stream ->
-                return BitmapFactory.decodeStream(stream)
-            }
-        } catch (e: IOException) {
-            Log.e(TAG, "IO exception loading augmented image bitmap.", e)
-        }
-
-        return null
-    }
-
     companion object {
 
         private const val TAG = "AugmentedImageFragment"
 
-        // This is the name of the image in the sample database.  A copy of the image is in the assets
-        // directory.  Opening this image on your computer is a good quick way to test the augmented image
-        // matching.
-        private const val DEFAULT_IMAGE_NAME = "default.jpg"
-
         // This is a pre-created database containing the sample image.
         private const val SAMPLE_IMAGE_DATABASE = "runza_ad.imgdb"
-
-        // Augmented image configuration and rendering.
-        // Load a single image (true) or a pre-generated image database (false).
-        private const val USE_SINGLE_IMAGE = false
 
         // Do a runtime check for the OpenGL level available at runtime to avoid Sceneform crashing the
         // application.
