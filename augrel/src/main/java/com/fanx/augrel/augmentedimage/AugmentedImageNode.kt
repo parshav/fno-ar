@@ -2,6 +2,8 @@ package com.fanx.augrel.augmentedimage
 
 import android.content.Context
 import android.util.Log
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 import com.fanx.augrel.R
 import com.google.ar.core.AugmentedImage
@@ -13,14 +15,15 @@ import com.google.ar.sceneform.rendering.ViewRenderable
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
 
-class AugmentedImageNode(context: Context) : AnchorNode() {
 
-    private var hasBeenSet = false
+class AugmentedImageNode(context: Context) : AnchorNode() {
 
     companion object {
         private var something: CompletableFuture<ViewRenderable>? = null
         private val TAG = "AugmentedImageNode"
     }
+
+    private var hasBeenSet = false
 
     init {
         if (something == null) {
@@ -39,7 +42,7 @@ class AugmentedImageNode(context: Context) : AnchorNode() {
                 CompletableFuture.allOf(something!!)
                         .thenAccept { this.image = image }
                         .handle<Any> { _, _ ->
-
+/*
                             var webView: WebView? = null
                             try {
                                 webView = something!!.get().view.findViewById(R.id.web_view)
@@ -48,10 +51,12 @@ class AugmentedImageNode(context: Context) : AnchorNode() {
                             } catch (e: InterruptedException) {
                                 e.printStackTrace()
                             }
-
                             webView!!.settings.javaScriptEnabled = true
+                            webView.webChromeClient = WebChromeClient()
+                            webView.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                             webView.settings.mediaPlaybackRequiresUserGesture = false
-                            webView.loadUrl("https://thumbs.gfycat.com/ObviousSeriousHectorsdolphin.webp")
+                            webView.settings.userAgentString = "Mozilla/5.0 (Linux; U; Android 2.0; en-us; Droid Build/ESD20) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17"
+                            webView.loadUrl("https://clips.vorwaerts-gmbh.de/VfE_html5.mp4")*/
                             null
                         }
                         .exceptionally { throwable ->
@@ -61,17 +66,12 @@ class AugmentedImageNode(context: Context) : AnchorNode() {
             }
 
             if (!hasBeenSet) {
-
                 hasBeenSet = true
                 anchor = image?.createAnchor(image.centerPose)
-                val localPosition = Vector3()
                 val cornerNode = Node()
-
                 val theView = something!!.getNow(null)
-
-                localPosition.set(0.0f, 0.0f, 0.0f)
                 cornerNode.setParent(this)
-                cornerNode.localPosition = localPosition
+                cornerNode.localPosition = Vector3(0f, 0f, 0f)
                 cornerNode.localRotation = Quaternion.axisAngle(Vector3(1f, 0f, 0f), 90f)
                 cornerNode.renderable = theView
             }
