@@ -13,11 +13,13 @@
  * limitations under the License.
  */
  apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.google.ar.sceneform.samples.augmentedimage"
+        applicationId "com.fanx.augrel.augmentedimage"
 
         // Sceneform requires minSdkVersion >= 24.
         minSdkVersion 24
@@ -52,6 +54,9 @@ dependencies {
 
     // Use the Sceneform UX Package built from the source files included in the sceneformux folder.
     //api project(":sceneformux")
+
+    implementation project(":augrel")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.ar.sceneform.plugin'
@@ -75,3 +80,6 @@ sceneform.asset('sampledata/models/frame_upper_right.obj',
         'default',
         'sampledata/models/frame_upper_right.sfa',
         'src/main/assets/models/frame_upper_right')
+repositories {
+    mavenCentral()
+}
