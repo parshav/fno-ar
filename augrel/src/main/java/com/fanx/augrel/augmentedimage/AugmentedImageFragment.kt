@@ -2,19 +2,40 @@ package com.fanx.augrel.augmentedimage
 
 import android.app.ActivityManager
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.fanx.augrel.R
 import com.fanx.augrel.helpers.SnackbarHelper
+import com.google.ar.core.AugmentedImage
 import com.google.ar.core.AugmentedImageDatabase
 import com.google.ar.core.Config
 import com.google.ar.core.Session
+import com.google.ar.core.TrackingState
+import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.FrameTime
+import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.rendering.ExternalTexture
+import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import java.io.IOException
+import java.util.HashMap
 
 class AugmentedImageFragment : ArFragment() {
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var externalTexture: ExternalTexture
+    private lateinit var videoRenderable: ModelRenderable
+    private lateinit var videoAnchorNode: AnchorNode
+
+    private var activeAugmentedImage: AugmentedImage? = null
+
+    private val augmentedImageMap = HashMap<AugmentedImage, AnchorNode>()
+
+    private var isPlaying = false
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -37,6 +58,11 @@ class AugmentedImageFragment : ArFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mediaPlayer = MediaPlayer()
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -47,6 +73,9 @@ class AugmentedImageFragment : ArFragment() {
         planeDiscoveryController.hide()
         planeDiscoveryController.setInstructionView(null)
         arSceneView.planeRenderer.isEnabled = false
+        arSceneView.isLightEstimationEnabled = false
+        initializeSession()
+        createArScene()
         return view
     }
 
@@ -86,6 +115,107 @@ class AugmentedImageFragment : ArFragment() {
 
         config.augmentedImageDatabase = augmentedImageDatabase
         return true
+    }
+
+    private fun createArScene() {
+        // Create an ExternalTexture for displaying the contents of the video.
+        externalTexture = ExternalTexture().also {
+            mediaPlayer.setSurface(it.surface)
+        }
+
+        // Create a renderable with a material that has a parameter of type 'samplerExternal' so that
+        // it can display an ExternalTexture.
+        ModelRenderable.builder()
+                .setSource(requireContext(), R.raw.augmented_video_model)
+                .build()
+                .thenAccept { renderable ->
+                    videoRenderable = renderable
+                    renderable.isShadowCaster = false
+                    renderable.isShadowReceiver = false
+                    renderable.material.setExternalTexture("videoTexture", externalTexture)
+                }
+                .exceptionally { throwable ->
+                    Log.e(TAG, "Could not create ModelRenderable", throwable)
+                    return@exceptionally null
+                }
+
+        videoAnchorNode = AnchorNode().apply {
+            setParent(arSceneView.scene)
+        }
+    }
+
+    private fun playbackArVideo(augmentedImage: AugmentedImage) {
+        Log.d(TAG, "playbackVideo = ${augmentedImage.name}")
+
+//        if (!isPlaying) {
+        requireContext().assets.openFd("lion_chroma.mp4")
+                .use { descriptor ->
+                    mediaPlayer.setDataSource(descriptor)
+                }.also {
+                    mediaPlayer.isLooping = true
+                    mediaPlayer.prepare()
+                    mediaPlayer.start()
+                }
+        isPlaying = true
+//        }
+
+        videoAnchorNode.anchor = augmentedImage.createAnchor(augmentedImage.centerPose)
+        videoAnchorNode.localScale = Vector3(
+                augmentedImage.extentX, // width
+                1.0f,
+                augmentedImage.extentZ
+        ) // height
+
+        activeAugmentedImage = augmentedImage
+
+        externalTexture.surfaceTexture.setOnFrameAvailableListener {
+            it.setOnFrameAvailableListener(null)
+            videoAnchorNode.renderable = videoRenderable
+        }
+    }
+
+    private fun dismissArVideo() {
+        videoAnchorNode.anchor?.detach()
+        videoAnchorNode.renderable = null
+        activeAugmentedImage = null
+        mediaPlayer.reset()
+    }
+
+    override fun onUpdate(frameTime: FrameTime?) {
+        super.onUpdate(frameTime)
+        val frame = arSceneView.arFrame
+        if (frame == null || frame.camera.trackingState != TrackingState.TRACKING) {
+            return
+        }
+
+        val updatedAugmentedImages = frame.getUpdatedTrackables(AugmentedImage::class.java)
+        // When an image is in PAUSED state, but the camera is not PAUSED, it has been detected,
+        // but not yet tracked.
+        for (augmentedImage in updatedAugmentedImages) {
+            if (activeAugmentedImage != augmentedImage &&
+                    augmentedImage.trackingState == TrackingState.TRACKING && !isPlaying
+            ) {
+                try {
+                    if (!augmentedImageMap.containsKey(augmentedImage)) {
+                        dismissArVideo()
+                        playbackArVideo(augmentedImage)
+                        augmentedImageMap[augmentedImage] = videoAnchorNode
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Could not play video [${augmentedImage.name}]", e)
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dismissArVideo()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 
     companion object {
