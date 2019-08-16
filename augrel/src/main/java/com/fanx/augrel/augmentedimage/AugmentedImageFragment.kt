@@ -17,6 +17,7 @@ import com.google.ar.core.Session
 import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ExternalTexture
 import com.google.ar.sceneform.rendering.ModelRenderable
@@ -158,14 +159,16 @@ class AugmentedImageFragment : ArFragment() {
                 }
         isPlaying = true
 //        }
-
-        videoAnchorNode.anchor = augmentedImage.createAnchor(augmentedImage.centerPose)
-        videoAnchorNode.localScale = Vector3(
-                augmentedImage.extentX, // width
-                1.0f,
-                augmentedImage.extentZ
-        ) // height
-
+        videoAnchorNode.apply {
+            anchor = augmentedImage.createAnchor(augmentedImage.centerPose)
+            localScale = Vector3(
+                    augmentedImage.extentX, // width
+                    1.0f,
+                    augmentedImage.extentZ
+            ) // height
+            localPosition = Vector3(0f, 0f, 0f)
+            localRotation = Quaternion.axisAngle(Vector3(0f, 0f, 1f), 90f)
+        }
         activeAugmentedImage = augmentedImage
 
         externalTexture.surfaceTexture.setOnFrameAvailableListener {

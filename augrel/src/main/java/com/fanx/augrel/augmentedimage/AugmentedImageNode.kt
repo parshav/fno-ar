@@ -2,9 +2,6 @@ package com.fanx.augrel.augmentedimage
 
 import android.content.Context
 import android.util.Log
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
 import com.fanx.augrel.R
 import com.google.ar.core.AugmentedImage
 import com.google.ar.sceneform.AnchorNode
@@ -13,7 +10,6 @@ import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ExecutionException
 
 
 class AugmentedImageNode(context: Context) : AnchorNode() {
@@ -28,7 +24,7 @@ class AugmentedImageNode(context: Context) : AnchorNode() {
     init {
         if (something == null) {
             something = ViewRenderable.builder()
-                    .setVerticalAlignment(ViewRenderable.VerticalAlignment.CENTER)
+                    .setVerticalAlignment(ViewRenderable.VerticalAlignment.BOTTOM)
                     .setView(context, R.layout.custom_view)
                     .setSizer { view -> Vector3(0.1f, 0.1f, 0.1f) }
                     .build()
@@ -42,21 +38,21 @@ class AugmentedImageNode(context: Context) : AnchorNode() {
                 CompletableFuture.allOf(something!!)
                         .thenAccept { this.image = image }
                         .handle<Any> { _, _ ->
-/*
-                            var webView: WebView? = null
-                            try {
-                                webView = something!!.get().view.findViewById(R.id.web_view)
-                            } catch (e: ExecutionException) {
-                                e.printStackTrace()
-                            } catch (e: InterruptedException) {
-                                e.printStackTrace()
-                            }
-                            webView!!.settings.javaScriptEnabled = true
-                            webView.webChromeClient = WebChromeClient()
-                            webView.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-                            webView.settings.mediaPlaybackRequiresUserGesture = false
-                            webView.settings.userAgentString = "Mozilla/5.0 (Linux; U; Android 2.0; en-us; Droid Build/ESD20) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17"
-                            webView.loadUrl("https://clips.vorwaerts-gmbh.de/VfE_html5.mp4")*/
+                            /*
+                                                        var webView: WebView? = null
+                                                        try {
+                                                            webView = something!!.get().view.findViewById(R.id.web_view)
+                                                        } catch (e: ExecutionException) {
+                                                            e.printStackTrace()
+                                                        } catch (e: InterruptedException) {
+                                                            e.printStackTrace()
+                                                        }
+                                                        webView!!.settings.javaScriptEnabled = true
+                                                        webView.webChromeClient = WebChromeClient()
+                                                        webView.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                                                        webView.settings.mediaPlaybackRequiresUserGesture = false
+                                                        webView.settings.userAgentString = "Mozilla/5.0 (Linux; U; Android 2.0; en-us; Droid Build/ESD20) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17"
+                                                        webView.loadUrl("https://clips.vorwaerts-gmbh.de/VfE_html5.mp4")*/
                             null
                         }
                         .exceptionally { throwable ->
