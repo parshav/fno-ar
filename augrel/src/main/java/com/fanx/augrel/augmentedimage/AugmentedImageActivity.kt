@@ -28,7 +28,7 @@ class AugmentedImageActivity : AppCompatActivity() {
         arFragment = supportFragmentManager.findFragmentById(R.id.ux_fragment) as ArFragment
         fitToScanView = findViewById(R.id.image_view_fit_to_scan)
 
-        arFragment.arSceneView.scene.addOnUpdateListener(::onUpdateFrame)
+//        arFragment.arSceneView.scene.addOnUpdateListener(::onUpdateFrame)
     }
 
     override fun onResume() {
