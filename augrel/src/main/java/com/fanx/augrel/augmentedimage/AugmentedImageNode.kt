@@ -12,7 +12,7 @@ import com.google.ar.sceneform.rendering.ViewRenderable
 import java.util.concurrent.CompletableFuture
 
 
-class AugmentedImageNode(context: Context) : AnchorNode() {
+internal class AugmentedImageNode(context: Context) : AnchorNode() {
 
     companion object {
         private var something: CompletableFuture<ViewRenderable>? = null
