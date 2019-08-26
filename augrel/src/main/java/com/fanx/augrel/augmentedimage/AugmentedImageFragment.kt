@@ -25,7 +25,7 @@ import com.google.ar.sceneform.ux.ArFragment
 import java.io.IOException
 import java.util.HashMap
 
-class AugmentedImageFragment : ArFragment() {
+internal class AugmentedImageFragment : ArFragment() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var externalTexture: ExternalTexture
@@ -105,7 +105,7 @@ class AugmentedImageFragment : ArFragment() {
         // load a pre-existing augmented image database.
         try {
             context!!.assets
-                    .open(SAMPLE_IMAGE_DATABASE)
+                    .open(ArFNO.modelFilename)
                     .use { stream ->
                         augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, stream)
                     }
@@ -146,10 +146,9 @@ class AugmentedImageFragment : ArFragment() {
     }
 
     private fun playbackArVideo(augmentedImage: AugmentedImage) {
-        Log.d(TAG, "playbackVideo = ${augmentedImage.name}")
 
 //        if (!isPlaying) {
-        requireContext().assets.openFd("lion_chroma.mp4")
+        requireContext().assets.openFd(ArFNO.videoFilename)
                 .use { descriptor ->
                     mediaPlayer.setDataSource(descriptor)
                 }.also {
@@ -226,7 +225,7 @@ class AugmentedImageFragment : ArFragment() {
         private const val TAG = "AugmentedImageFragment"
 
         // This is a pre-created database containing the sample image.
-        private const val SAMPLE_IMAGE_DATABASE = "runza_ad.imgdb"
+//        private const val SAMPLE_IMAGE_DATABASE = "runza_ad.imgdb"
 
         // Do a runtime check for the OpenGL level available at runtime to avoid Sceneform crashing the
         // application.
