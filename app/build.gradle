@@ -22,7 +22,7 @@ android {
         applicationId "com.fanx.augrel.augmentedimage"
 
         // Sceneform requires minSdkVersion >= 24.
-        minSdkVersion 24
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
