@@ -12,7 +12,7 @@ import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.ux.ArFragment
 import java.util.HashMap
 
-class AugmentedImageActivity : AppCompatActivity() {
+internal class AugmentedImageActivity : AppCompatActivity() {
 
     private lateinit var arFragment: ArFragment
     private lateinit var fitToScanView: ImageView
