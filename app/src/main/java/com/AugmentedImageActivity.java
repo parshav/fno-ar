@@ -14,6 +14,7 @@ public class AugmentedImageActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mainn);
 
+        ArFNO.useTestVideo();
         ArFNO.startArActivity(this);
     }
 }

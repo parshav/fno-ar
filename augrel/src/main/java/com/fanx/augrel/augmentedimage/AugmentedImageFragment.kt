@@ -140,7 +140,7 @@ internal class AugmentedImageFragment : ArFragment() {
     private fun playbackArVideo(augmentedImage: AugmentedImage) {
 
         mediaPlayer.apply {
-            setDataSource("https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
+            setDataSource(ArFNO.videoUrl)
             isLooping = true
             prepare()
             start()
