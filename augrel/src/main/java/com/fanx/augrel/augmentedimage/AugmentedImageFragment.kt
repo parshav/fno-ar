@@ -41,14 +41,6 @@ internal class AugmentedImageFragment : ArFragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        // Check for Sceneform being supported on this device.  This check will be integrated into
-        // Sceneform eventually.
-        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            Log.e(TAG, "Sceneform requires Android N or later")
-            SnackbarHelper.getInstance()
-                    .showError(activity, "Sceneform requires Android N or later")
-        }*/
-
         val openGlVersionString = (context!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
                 .deviceConfigurationInfo
                 .glEsVersion
@@ -147,17 +139,13 @@ internal class AugmentedImageFragment : ArFragment() {
 
     private fun playbackArVideo(augmentedImage: AugmentedImage) {
 
-//        if (!isPlaying) {
-        requireContext().assets.openFd(ArFNO.videoFilename)
-                .use { descriptor ->
-                    mediaPlayer.setDataSource(descriptor)
-                }.also {
-                    mediaPlayer.isLooping = true
-                    mediaPlayer.prepare()
-                    mediaPlayer.start()
-                }
+        mediaPlayer.apply {
+            setDataSource(ArFNO.videoUrl)
+            isLooping = true
+            prepare()
+            start()
+        }
         isPlaying = true
-//        }
         videoAnchorNode.apply {
             anchor = augmentedImage.createAnchor(augmentedImage.centerPose)
             localScale = Vector3(
@@ -165,7 +153,7 @@ internal class AugmentedImageFragment : ArFragment() {
                     1.0f,
                     augmentedImage.extentZ
             ) // height
-            localPosition = Vector3(0f, 0f, 0f)
+
             localRotation = Quaternion.axisAngle(Vector3(0f, 0f, 1f), 90f)
         }
         activeAugmentedImage = augmentedImage
