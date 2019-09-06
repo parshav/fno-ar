@@ -14,7 +14,7 @@ internal class AugmentedImageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.arfno_activity_main)
 
         arFragment = supportFragmentManager.findFragmentById(R.id.ux_fragment) as ArFragment
         fitToScanView = findViewById(R.id.image_view_fit_to_scan)
