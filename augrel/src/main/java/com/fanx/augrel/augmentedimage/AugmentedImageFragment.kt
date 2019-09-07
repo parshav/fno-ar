@@ -65,7 +65,7 @@ internal class AugmentedImageFragment : ArFragment() {
         // Turn off the plane discovery since we're only looking for images
         planeDiscoveryController.hide()
         planeDiscoveryController.setInstructionView(null)
-        arSceneView.planeRenderer.isEnabled = false
+//        arSceneView.planeRenderer.isEnabled = false
         arSceneView.isLightEstimationEnabled = false
         initializeSession()
         createArScene()

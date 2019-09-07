@@ -10,18 +10,18 @@ import com.google.ar.sceneform.ux.ArFragment
 internal class AugmentedImageActivity : AppCompatActivity() {
 
     private lateinit var arFragment: ArFragment
-    private lateinit var fitToScanView: ImageView
+//    private lateinit var fitToScanView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.arfno_activity_main)
 
         arFragment = supportFragmentManager.findFragmentById(R.id.ux_fragment) as ArFragment
-        fitToScanView = findViewById(R.id.image_view_fit_to_scan)
+//        fitToScanView = findViewById(R.id.image_view_fit_to_scan)
     }
 
     override fun onResume() {
         super.onResume()
-        fitToScanView.visibility = View.VISIBLE
+//        fitToScanView.visibility = View.VISIBLE
     }
 }
