@@ -3,6 +3,7 @@ package com.fanx.augrel.augmentedimage
 import android.app.ActivityManager
 import android.content.Context
 import android.media.MediaPlayer
+import android.media.MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -141,6 +142,7 @@ internal class AugmentedImageFragment : ArFragment() {
 
         mediaPlayer.apply {
             setDataSource(ArFNO.videoUrl)
+            setVideoScalingMode(VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
             isLooping = true
             prepare()
             start()
