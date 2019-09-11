@@ -11,6 +11,12 @@ object ArFNO {
     var videoUrl = ""
     @JvmStatic
     var modelFilename = "runza_ad.imgdb"
+    @JvmStatic
+    var toolbarColor = 0
+    @JvmStatic
+    var toolbarText = "AR Experience"
+    @JvmStatic
+    var toolbarTextColor = 0
 
     @JvmStatic
     fun useTestVideo() {

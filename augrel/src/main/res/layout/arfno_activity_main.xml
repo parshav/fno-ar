@@ -19,21 +19,45 @@
     android:layout_height="match_parent"
     tools:context=".AugmentedImageActivity">
 
-
-    <fragment android:name="com.fanx.augrel.augmentedimage.AugmentedImageFragment"
-        android:id="@+id/ux_fragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:id="@+id/dummy_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/arrow_back" />
+
+            <TextView
+                android:id="@+id/tv_arxp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="23dp"
+                android:gravity="center_horizontal"
+                android:text="AR Experience"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
 
-<!--  <ImageView
-      android:id="@+id/image_view_fit_to_scan"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_gravity="center"
-      android:scaleType="fitCenter"
-      android:src="@drawable/fit_to_scan"
-      android:contentDescription="@string/fit_image_to_scan"
-      />-->
+        <fragment
+            android:id="@+id/ux_fragment"
+            android:name="com.fanx.augrel.augmentedimage.AugmentedImageFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 </FrameLayout>
