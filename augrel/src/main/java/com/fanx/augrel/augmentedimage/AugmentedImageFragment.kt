@@ -150,10 +150,14 @@ internal class AugmentedImageFragment : ArFragment() {
         isPlaying = true
         videoAnchorNode.apply {
             anchor = augmentedImage.createAnchor(augmentedImage.centerPose)
+
+            // dividing by 8000 for scaling.
+            val width = mediaPlayer.videoWidth.toFloat() / 8000
+            val height = mediaPlayer.videoHeight.toFloat() / 8000
             localScale = Vector3(
-                    augmentedImage.extentX, // width
+                    width,
                     1.0f,
-                    augmentedImage.extentZ
+                    height
             ) // height
 
             localRotation = Quaternion.axisAngle(Vector3(0f, 0f, 1f), 90f)
