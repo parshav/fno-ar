@@ -29,6 +29,11 @@ internal class AugmentedImageActivity : AppCompatActivity() {
         xpTitle.text = if (ArFNO.toolbarText.isNotEmpty()) ArFNO.toolbarText else "AR Experience"
 
         toolbar.setBackgroundColor(if (ArFNO.toolbarColor != 0) ArFNO.toolbarColor else Color.GRAY)
+
+        backButton.setColorFilter(
+                if (ArFNO.backButtonColor != 0) ArFNO.backButtonColor
+                else Color.BLACK
+        )
     }
 
     override fun onStart() {

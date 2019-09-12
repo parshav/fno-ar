@@ -17,6 +17,8 @@ object ArFNO {
     var toolbarText = "AR Experience"
     @JvmStatic
     var toolbarTextColor = 0
+    @JvmStatic
+    var backButtonColor = 0
 
     @JvmStatic
     fun useTestVideo() {

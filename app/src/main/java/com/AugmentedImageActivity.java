@@ -20,6 +20,7 @@ public class AugmentedImageActivity extends AppCompatActivity {
         ArFNO.setModelFilename("neb_runza.imgdb");
         ArFNO.setToolbarText("Test Title");
         ArFNO.setToolbarColor(Color.CYAN);
+        ArFNO.setBackButtonColor(Color.MAGENTA);
         ArFNO.startArActivity(this);
     }
 }
