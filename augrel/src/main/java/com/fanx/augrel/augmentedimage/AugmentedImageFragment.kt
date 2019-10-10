@@ -152,8 +152,8 @@ internal class AugmentedImageFragment : ArFragment() {
             anchor = augmentedImage.createAnchor(augmentedImage.centerPose)
 
             // dividing by 8000 for scaling.
-            val width = mediaPlayer.videoWidth.toFloat() / 8000
-            val height = mediaPlayer.videoHeight.toFloat() / 8000
+            val width = mediaPlayer.videoWidth.toFloat() / 7000
+            val height = mediaPlayer.videoHeight.toFloat() / 7000
             localScale = Vector3(
                     width,
                     1.0f,
